@@ -1,6 +1,7 @@
 # main.py
 import random
-from typing import Optional
+import re
+from typing import Optional, Union
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -30,17 +31,13 @@ app.add_middleware(
 async def root():
     return {"message" : "sample data api"}
 
-# @app.post("/sensors/")
-# async def ceate_sensor(sensor: Sensor):
-#     sensor_dict = sensor.dict()
-#     diff = math.abs(value - random.Random()*sensor.sensorID)
-#     sensor.value = random.Random()*sensor.sensorID
-#     sensor_dict.update({"diff" : diff})
-#     return sensor_dict
-
 @app.get("/sensor/{sensor_id}")
-async def read_item(sensor_id: int):
+async def read_sensor(sensor_id: int):
     return {"sensor_id":update_value(sensor_id)}
+
+@app.get("/sensors/{sensor_id}")
+async def read_sensors(sensor_id: int, q: Union[str, None] = None):
+    return {"sensor_id" : sensor_id, "q" : q}
 
 @app.get("/users/me")
 async def read_user_me():
